@@ -27,7 +27,10 @@ class enemy():
             screen.blit(self.img, [self.posx, self.posy])
 
     def enemyfire(self, screen):
-        self.bullet.enemyfire(screen, self.posx, self.posy)
+        bulletposx = self.posx
+        bulletposy = self.posy
+        self.bullet.enemyfire(screen, bulletposx - 60, bulletposy)
+
 
 
 

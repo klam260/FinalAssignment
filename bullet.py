@@ -26,8 +26,6 @@ class bullet():
             self.bulletposy = playerposy
 
     def enemyfire(self, screen, enemyposx, enemyposy):
-        self.bulletposx = enemyposx
-        self.bulletposy = enemyposy
         screen.blit(self.img, [self.bulletposx - 60, enemyposy])
         self.bulletposx -= 8
 
