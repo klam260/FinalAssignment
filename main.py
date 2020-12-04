@@ -10,6 +10,8 @@ myfont = pygame.font.SysFont('Comic Sans MS', 30)
 
 clock = pygame.time.Clock()
 
+# for experimenting with timer
+
 screen_width = 1600
 screen_height = 900
 screen = pygame.display.set_mode((screen_width,screen_height))
@@ -28,10 +30,11 @@ bullet = bullet(player.posx, player.posy)
 #initiate enemy
 enemy = enemy(screen_width, screen_height)
 
+#initiate timer
+current_time = 0
+
 
 while True:
-
-    clock.tick(60)
 
     #initiates the background for the screen
     background.drawbg(screen)
@@ -59,6 +62,8 @@ while True:
     if keys[pygame.K_d]:
         player.playermovex(1, screen_width)
 
+    enemy.enemymovement(player.posy,screen)
+
 
     for event in pygame.event.get():
 
@@ -75,6 +80,11 @@ while True:
         bullet.fire(screen, screen_width, player.posx, player.posy)
         bullet.bulletposx += bullet.bulletspeed
 
+    #for enemy firing, currently stuck in an infinite loop freezing the game.
+    enemy.enemyfire(screen)
+
+
+    clock.tick(60)
     pygame.event.pump()
     pygame.display.update()
 

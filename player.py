@@ -10,6 +10,7 @@ class player():
         self.posx = 200
         self.posy = 500
         self.speed = 5
+        self.totalbullets = []
 
         # if state defines which ship to use depending on player level.
 
