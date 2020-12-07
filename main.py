@@ -75,13 +75,17 @@ while True:
             pygame.quit()
             sys.exit()
 
-      # bullet movement
+      # bullet movement, if state is fire in bullet object, proceed to calculate movements through while loop
     if bullet.state == 'fire':
         bullet.fire(screen, screen_width, player.posx, player.posy)
         bullet.bulletposx += bullet.bulletspeed
 
+
     #for enemy firing, currently stuck in an infinite loop freezing the game.
     enemy.enemyfire(screen)
+    bullet.isCollision(enemy.posx, enemy.posy, bullet.bulletposx, bullet.bulletposy)
+
+
 
 
     clock.tick(60)

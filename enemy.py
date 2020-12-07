@@ -8,7 +8,7 @@ class enemy():
         self.enemyhp = 1
         self.posx = (width - 250)
         self.posy = (height - 500)
-        self.speed = 5
+        self.speed = 2
         self.enemyspeed = 2
         self.totalbullets = []
         self.bullet = bullet(self.posx, self.posy)
