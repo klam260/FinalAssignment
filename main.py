@@ -1,5 +1,5 @@
 import pygame, sys
-from surface import background
+from surface import surface
 from player import player
 from bullet import bullet
 from enemy import enemy
@@ -19,10 +19,10 @@ pygame.display.set_caption('2d-diver')
 
 
 #initiate background
-background = background('background.png', screen_width, screen_height)
+background = surface('background.png', screen_width, screen_height)
 
 #initiate player (health, level)
-player = player(10, 1)
+player = player()
 
 #initiate bullet
 bullet = bullet(player.posx, player.posy)
@@ -51,16 +51,16 @@ while True:
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_w]:
-        player.playermovey(-1, screen_height)
+        player.playermoveup(screen_height)
 
     if keys[pygame.K_s]:
-        player.playermovey(1, screen_height)
+        player.playermovedown(screen_height)
 
     if keys[pygame.K_a]:
-        player.playermovex(-1, screen_width)
+        player.playermoveleft(screen_width)
 
     if keys[pygame.K_d]:
-        player.playermovex(1, screen_width)
+        player.playermoveright(screen_width)
 
     enemy.enemymovement(player.posy,screen)
 
@@ -81,10 +81,10 @@ while True:
         bullet.bulletposx += bullet.bulletspeed
 
 
-    #for enemy firing, currently stuck in an infinite loop freezing the game.
-    enemy.enemyfire(screen)
+    #for enemy firing, enemy can fire bullet but bullet collision is not properly calculated.
+    enemy.enemyfire(screen, player.posx, player.posy)
     bullet.isCollision(enemy.posx, enemy.posy, bullet.bulletposx, bullet.bulletposy)
-
+    # bullet.playerCollision(player.posx, player.posy, bullet.bulletposx, bullet.bulletposy)
 
 
 
