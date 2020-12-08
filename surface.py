@@ -4,13 +4,27 @@ import os
 
 class surface():
 
-    def __init__(self, bgimg, width, height):
-        self.bg_surface = pygame.image.load(os.path.join("./assets", bgimg))
-        self.bg_surface = pygame.transform.scale(self.bg_surface, (width, height))
+    def __init__(self, width, height):
+        self.lvl = 1
+        self.startimg = pygame.image.load(os.path.join("./assets", 'start.png'))
+        self.startimg = pygame.transform.scale(self.startimg, (width, height))
+
+        if self.lvl == 1:
+            self.bgimg = pygame.image.load(os.path.join("./assets", 'background.png'))
+            self.bgimg = pygame.transform.scale(self.bgimg, (width, height))
+        elif self.lvl == 2:
+            self.bgimg = pygame.image.load(os.path.join("./assets", 'backgroundlvl2.png'))
+            self.bgimg = pygame.transform.scale(self.bgimg, (width, height))
+        elif self.lvl == 3:
+            self.bgimg = pygame.image.load(os.path.join("./assets", 'backgroundlvl3.png'))
+            self.bgimg = pygame.transform.scale(self.bgimg, (width, height))
+        elif self.lvl == 0:
+            self.bgimg = pygame.image.load(os.path.join("./assets", 'start.png'))
+            self.bgimg = pygame.transform.scale(self.bgimg, (width, height))
 
 
     def drawbg(self, screen):
-        screen.blit(self.bg_surface, [0,0])
+        screen.blit(self.bgimg, [0,0])
 
     def gameover(self, screen):
         font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
@@ -19,7 +33,28 @@ class surface():
 
     def victory(self, screen):
         font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
-        gameover = font.render('Victory', True, (0, 255, 0))
-        screen.blit(gameover, (600, 255))
+        victory = font.render('Victory press T to proceed to next level', True, (0, 255, 0))
+        screen.blit(victory, (600, 255))
+
+    def startscreen(self, screen):
+       screen.blit(self.startimg, [0,0])
+       font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
+       menu = font.render('Welcome to 2d Divers! Press P to start!', True, (0, 0, 0))
+       screen.blit(menu, (200, 255))
+
+
+class score():
+    def __init__(self):
+        self.score = 0
+
+    def updatescore(self, scoreamount):
+        self.score += scoreamount
+
+    def drawscore(self, screen):
+        font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 28)
+        score = font.render(f'SCORE: {self.score}', True, (255, 0, 0))
+        screen.blit(score, (50, 50))
+
+
 
 

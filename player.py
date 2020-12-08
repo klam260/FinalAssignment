@@ -66,7 +66,7 @@ class player():
     def playernextlvl(self):
         self.posx = 200
         self.posy = 500
-        self.playerlvl += 1
+        self.playerlvl += 2
 
 
 

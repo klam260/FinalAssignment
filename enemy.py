@@ -18,7 +18,7 @@ class enemy():
         self.img = pygame.image.load(os.path.join('./assets', 'enemy.png'))
         self.img = pygame.transform.scale(self.img, [100,100])
         self.player = player()
-        self.surface = surface('background.png', width, height)
+        self.surface = surface(width, height)
 
     def drawenemy(self, screen):
         screen.blit(self.img, [self.posx, self.posy])
@@ -40,6 +40,7 @@ class enemy():
                 self.player.hp -= 1
                 print(self.player.hp)
             elif self.player.hp == 0:
+                #must remove bullet from game over here due to the current structure, as bullet from enemy is kept track in this function
                 self.bullet.bulletposx = -3000
                 return True
                 # self.player.posy = 3000

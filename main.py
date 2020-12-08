@@ -1,5 +1,5 @@
 import pygame, sys
-from surface import surface
+from surface import surface, score
 from player import player
 from bullet import bullet
 from enemy import enemy
@@ -19,7 +19,7 @@ pygame.display.set_caption('2d-diver')
 
 
 #initiate background
-background = surface('background.png', screen_width, screen_height)
+background = surface(screen_width, screen_height)
 
 #initiate player (health, level)
 player = player()
@@ -30,14 +30,35 @@ bullet = bullet(player.posx, player.posy)
 #initiate enemy
 enemy = enemy(screen_width, screen_height)
 
-#initiate timer
-current_time = 0
+#initiate score
+score = score()
 
 #gameover state and victory state
 gameover = False
 victory = False
+startingscreen = True
 
+#for starting screen
+
+while startingscreen:
+    background.startscreen(screen)
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                startingscreen = False
+
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+    pygame.display.update()
+
+
+#for making a timer in game
+initialtime = pygame.time.get_ticks() #initiates the timer first
+
+#main game loop
 while True:
+    seconds = (pygame.time.get_ticks() - initialtime)/1000
 
     #initiates the background for the screen
     background.drawbg(screen)
@@ -48,6 +69,8 @@ while True:
     #draws enemy to screen
     enemy.drawenemy(screen)
 
+    #draws score to screen
+    score.drawscore(screen)
 
 
     #for character movement
@@ -93,12 +116,12 @@ while True:
 
     #for enemy firing, enemy can fire bullet but bullet collision is not properly calculated. returns true if enemy kills player
     if enemy.enemyfire(screen, player.posx, player.posy):
-        player.posx = 3000
-        enemy.posx = -3000
         gameover = True
 
     #if gameover state becomes true, draw the following onto the screen, same with victory
     if gameover:
+        player.posx = 3000
+        enemy.posx = -3000
         background.gameover(screen)
 
     if victory:
@@ -112,8 +135,6 @@ while True:
             enemy.removeenemy()
             player.posx = 3000
             victory = True
-
-
 
 
     clock.tick(60)
