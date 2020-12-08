@@ -31,16 +31,16 @@ class bullet():
         self.enemystate = 'fire'
         screen.blit(self.img, [self.bulletposx - 60, self.bulletposy])
         self.bulletposx -= 8
-        print(self.bulletposx)
+        # print(self.bulletposx)
         if self.bulletposx <= 0:
             self.enemystate = 'ready'
             self.bulletposx = enemyposx
             self.bulletposy = enemyposy
 
     #for collision from player bullets
-    def isCollision(self, positionx, positiony, bulletx, bullety):
+    def enemyCollision(self, positionx, positiony, bulletx, bullety):
         distance = math.sqrt((math.pow(positionx - bulletx, 2)) + (math.pow(positiony-bullety,2)))
-        print(f"this is the distance from player to enemy: {distance}")
+        # print(f"this is the distance from player to enemy: {distance}")
         if distance < 27:
            #moves bullet off screen upon contact, when trying to move bullet back to player, it starts looping.
             self.bulletposx = 2000

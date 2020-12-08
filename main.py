@@ -33,6 +33,9 @@ enemy = enemy(screen_width, screen_height)
 #initiate timer
 current_time = 0
 
+#gameover state and victory state
+gameover = False
+victory = False
 
 while True:
 
@@ -70,6 +73,13 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 bullet.fire(screen, screen_width, player.posx, player.posy)
+            if victory:
+                if event.key == pygame.K_t:
+                    background.drawbg(screen)
+                    player.playernextlvl()
+                    player.drawplayer(screen)
+                    victory = False
+
 
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -81,10 +91,28 @@ while True:
         bullet.bulletposx += bullet.bulletspeed
 
 
-    #for enemy firing, enemy can fire bullet but bullet collision is not properly calculated.
-    enemy.enemyfire(screen, player.posx, player.posy)
-    bullet.isCollision(enemy.posx, enemy.posy, bullet.bulletposx, bullet.bulletposy)
-    # bullet.playerCollision(player.posx, player.posy, bullet.bulletposx, bullet.bulletposy)
+    #for enemy firing, enemy can fire bullet but bullet collision is not properly calculated. returns true if enemy kills player
+    if enemy.enemyfire(screen, player.posx, player.posy):
+        player.posx = 3000
+        enemy.posx = -3000
+        gameover = True
+
+    #if gameover state becomes true, draw the following onto the screen, same with victory
+    if gameover:
+        background.gameover(screen)
+
+    if victory:
+        background.victory(screen)
+
+    #responsible for the damage calculations on the enemy side. If enemy hp hits zero, victory becomes true and loop will blit background
+    if bullet.enemyCollision(enemy.posx, enemy.posy, bullet.bulletposx, bullet.bulletposy):
+        if enemy.hp > 0:
+            enemy.hp -= 1
+        elif enemy.hp == 0:
+            enemy.removeenemy()
+            player.posx = 3000
+            victory = True
+
 
 
 

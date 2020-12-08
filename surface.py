@@ -13,7 +13,13 @@ class surface():
         screen.blit(self.bg_surface, [0,0])
 
     def gameover(self, screen):
-        font = pygame.fontFont(os.path.join('./assets', 'square.ttf'), 28)
-        gameover = font.render('GAME OVER', True, (255, 255, 255))
-        screen.blit(gameover, (80, 255))
+        font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
+        gameover = font.render('GAME OVER', True, (255, 0, 0))
+        screen.blit(gameover, (600, 255))
+
+    def victory(self, screen):
+        font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
+        gameover = font.render('Victory', True, (0, 255, 0))
+        screen.blit(gameover, (600, 255))
+
 

@@ -7,6 +7,7 @@ from surface import surface
 class enemy():
 
     def __init__(self, width, height):
+        self.enemylvl = 1
         self.hp = 2
         self.posx = (width - 250)
         self.posy = (height - 500)
@@ -37,9 +38,20 @@ class enemy():
         if self.bullet.playerCollision(playerx, playery, self.posx, self.posy, self.bullet.bulletposx, self.bullet.bulletposy):
             if self.player.hp > 0:
                 self.player.hp -= 1
+                print(self.player.hp)
             elif self.player.hp == 0:
-                self.player.posy = 3000
-                self.surface.gameover(screen)
+                self.bullet.bulletposx = -3000
+                return True
+                # self.player.posy = 3000
+                # self.surface.gameover(screen)
+
+    def enemynextlvl(self):
+        self.enemylvl += 1
+
+
+    def removeenemy(self):
+        self.posx = -3000
+
 
 
 
