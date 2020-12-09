@@ -1,12 +1,12 @@
-import pygame, sys
-from surface import surface, score
+import pygame, sys, math
+from surface import surface, score, timer
 from player import player
 from bullet import bullet
 from enemy import enemy
+from sound import sound
 
 pygame.init()
-pygame.font.init()
-myfont = pygame.font.SysFont('Comic Sans MS', 30)
+pygame.mixer.init()
 
 clock = pygame.time.Clock()
 
@@ -33,16 +33,26 @@ enemy = enemy(screen_width, screen_height)
 #initiate score
 score = score()
 
-#gameover state and victory state
+#initiate timer
+timer = timer()
+
+#initiate sound
+sound = sound()
+
+#various states used to manage in game
 gameover = False
 victory = False
 startingscreen = True
+scoreupdated = False
 
 #for starting screen
 
 while startingscreen:
+
     background.startscreen(screen)
+
     for event in pygame.event.get():
+        sound.startscreenbgm.play()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
                 startingscreen = False
@@ -58,7 +68,9 @@ initialtime = pygame.time.get_ticks() #initiates the timer first
 
 #main game loop
 while True:
-    seconds = (pygame.time.get_ticks() - initialtime)/1000
+    #used as the timer for in game, only triggers when true. Once game over happens timer.state is set to false and we can retrieve the seconds that passed
+    if timer.state:
+        seconds = (pygame.time.get_ticks() - initialtime)/1000
 
     #initiates the background for the screen
     background.drawbg(screen)
@@ -72,6 +84,33 @@ while True:
     #draws score to screen
     score.drawscore(screen)
 
+    # draws timer to screen
+    timer.drawtimer(screen, seconds)
+
+    #managing sound effects and music
+
+    for event in pygame.event.get():
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                bullet.fire(screen, screen_width, player.posx, player.posy)
+            if victory:
+                if event.key == pygame.K_t:
+                    background.drawbg(screen)
+                    player.playernextlvl()
+                    player.drawplayer(screen)
+                    victory = False
+            if gameover:
+                if event.key == pygame.K_r:
+                    background.drawbg(screen) #redraws background
+                    player.playerrestart(screen) #calls method to recenter player
+                    enemy.enemyrestart(screen_height) #calls method to recenter enemy
+                    gameover = False #change gameover back to False to prevent loop
+                    timer.state = True
+
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
 
     #for character movement
     keys = pygame.key.get_pressed()
@@ -91,23 +130,6 @@ while True:
     enemy.enemymovement(player.posy,screen)
 
 
-    for event in pygame.event.get():
-
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                bullet.fire(screen, screen_width, player.posx, player.posy)
-            if victory:
-                if event.key == pygame.K_t:
-                    background.drawbg(screen)
-                    player.playernextlvl()
-                    player.drawplayer(screen)
-                    victory = False
-
-
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-
       # bullet movement, if state is fire in bullet object, proceed to calculate movements through while loop
     if bullet.state == 'fire':
         bullet.fire(screen, screen_width, player.posx, player.posy)
@@ -120,12 +142,19 @@ while True:
 
     #if gameover state becomes true, draw the following onto the screen, same with victory
     if gameover:
-        player.posx = 3000
-        enemy.posx = -3000
+        player.removeplayer()
+        enemy.removeenemy()
+        timer.state = False
         background.gameover(screen)
 
     if victory:
+        timer.state = False
         background.victory(screen)
+        scoreupdated = True
+
+    if scoreupdated:
+        score.updatescore(timer.bonusscore(seconds))
+        scoreupdated = False
 
     #responsible for the damage calculations on the enemy side. If enemy hp hits zero, victory becomes true and loop will blit background
     if bullet.enemyCollision(enemy.posx, enemy.posy, bullet.bulletposx, bullet.bulletposy):

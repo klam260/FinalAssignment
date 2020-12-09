@@ -66,7 +66,19 @@ class player():
     def playernextlvl(self):
         self.posx = 200
         self.posy = 500
-        self.playerlvl += 2
+        if self.playerlvl <= 3:
+            self.playerlvl += 1
+        else:
+            self.playerlvl = 3
+
+    def playerrestart(self, screen):
+        self.posx = 200
+        self.posy = 500
+        self.hp = 2
+        self.drawplayer(screen)
+
+    def removeplayer(self):
+        self.posx += 3000
 
 
 

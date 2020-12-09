@@ -51,7 +51,12 @@ class enemy():
 
 
     def removeenemy(self):
-        self.posx = -3000
+        self.posy = 3000
+
+    def enemyrestart(self, height):
+        self.posy = height - 500
+        self.hp = 3
+
 
 
 

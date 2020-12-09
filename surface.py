@@ -1,5 +1,5 @@
 import pygame
-import sys
+import math
 import os
 
 class surface():
@@ -34,7 +34,7 @@ class surface():
     def victory(self, screen):
         font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
         victory = font.render('Victory press T to proceed to next level', True, (0, 255, 0))
-        screen.blit(victory, (600, 255))
+        screen.blit(victory, (300, 400))
 
     def startscreen(self, screen):
        screen.blit(self.startimg, [0,0])
@@ -54,6 +54,27 @@ class score():
         font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 28)
         score = font.render(f'SCORE: {self.score}', True, (255, 0, 0))
         screen.blit(score, (50, 50))
+
+class timer():
+    def __init__(self):
+        self.seconds = 0
+        self.bonus = 1000
+        self.minutes = 0
+        self.state = True
+
+    def bonusscore(self, seconds):
+        return math.trunc(seconds) * self.bonus
+
+    def drawtimer(self, screen, seconds):
+        font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 28)
+        timer = font.render(f" Time in seconds: {math.trunc(seconds)}", True, (255, 0, 0))
+        screen.blit(timer, (800, 50))
+
+
+
+
+
+
 
 
 
