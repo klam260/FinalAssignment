@@ -75,11 +75,13 @@ while True:
     #initiates the background for the screen
     background.drawbg(screen)
 
-    #draws player to background
+    #draws player to background and displays hp
     player.drawplayer(screen)
+    player.displayhp(screen)
 
-    #draws enemy to screen
+    #draws enemy to screen and displays hp
     enemy.drawenemy(screen)
+    enemy.displayhp(screen)
 
     #draws score to screen
     score.drawscore(screen)
@@ -137,7 +139,7 @@ while True:
 
 
     #for enemy firing, enemy can fire bullet but bullet collision is not properly calculated. returns true if enemy kills player
-    if enemy.enemyfire(screen, player.posx, player.posy):
+    if enemy.enemyfire(screen, player.posx, player.posy, player):
         gameover = True
 
     #if gameover state becomes true, draw the following onto the screen, same with victory
@@ -158,12 +160,13 @@ while True:
 
     #responsible for the damage calculations on the enemy side. If enemy hp hits zero, victory becomes true and loop will blit background
     if bullet.enemyCollision(enemy.posx, enemy.posy, bullet.bulletposx, bullet.bulletposy):
-        if enemy.hp > 0:
-            enemy.hp -= 1
-        elif enemy.hp == 0:
-            enemy.removeenemy()
-            player.posx = 3000
-            victory = True
+        if enemy.hp >= 1:
+            enemy.hp -= player.dmg
+            if enemy.hp <= 0:
+                enemy.removeenemy()
+                player.posx = 3000
+                victory = True
+
 
 
     clock.tick(60)

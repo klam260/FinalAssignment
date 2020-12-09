@@ -12,6 +12,7 @@ class player():
         self.playerlvl = 1
         self.totalbullets = []
         self.image = 'initiate'
+        self.dmg = 1
 
         # if state defines which ship to use depending on player level.
 
@@ -79,6 +80,11 @@ class player():
 
     def removeplayer(self):
         self.posx += 3000
+
+    def displayhp(self, screen):
+        font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
+        hp = font.render(str(self.hp), True, (255, 255, 255))
+        screen.blit(hp, (self.posx + 30, self.posy - 60))
 
 
 

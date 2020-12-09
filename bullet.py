@@ -6,7 +6,6 @@ import math
 class bullet():
 
     def __init__(self, posx, posy):
-        self.img = "bullet.png"
         self.img = pygame.image.load(os.path.join('./assets', 'bullet.png'))
         self.img = pygame.transform.scale(self.img, (25, 25))
         self.bulletposx = posx
