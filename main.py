@@ -72,49 +72,7 @@ while True:
     if timer.state:
         seconds = (pygame.time.get_ticks() - initialtime)/1000
 
-    #initiates the background for the screen
-    background.drawbg(screen)
-
-    #draws player to background and displays hp
-    player.drawplayer(screen)
-    player.displayhp(screen)
-
-    #draws enemy to screen and displays hp
-    enemy.drawenemy(screen)
-    enemy.displayhp(screen)
-
-    #draws score to screen
-    score.drawscore(screen)
-
-    # draws timer to screen
-    timer.drawtimer(screen, seconds)
-
-    #managing sound effects and music
-
-    for event in pygame.event.get():
-
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                bullet.fire(screen, screen_width, player.posx, player.posy)
-            if victory:
-                if event.key == pygame.K_t:
-                    background.drawbg(screen)
-                    player.playernextlvl()
-                    player.drawplayer(screen)
-                    victory = False
-            if gameover:
-                if event.key == pygame.K_r:
-                    background.drawbg(screen) #redraws background
-                    player.playerrestart(screen) #calls method to recenter player
-                    enemy.enemyrestart(screen_height) #calls method to recenter enemy
-                    gameover = False #change gameover back to False to prevent loop
-                    timer.state = True
-
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-
-    #for character movement
+    # for character movements
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_w]:
@@ -128,6 +86,52 @@ while True:
 
     if keys[pygame.K_d]:
         player.playermoveright(screen_width)
+
+
+    for event in pygame.event.get():
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                bullet.fire(screen, screen_width, player.posx, player.posy)
+            if victory:
+                if event.key == pygame.K_t:
+                    background.drawbg(screen)
+                    player.playernextlvl()
+                    player.drawplayer(screen)
+                    enemy.enemyrestart(screen_height) #resets position and health of enemy
+                    enemy.enemynextlvl() #upgrades enemy to scale difficulty
+                    enemy.drawenemy(screen) #draws enemy to screen after applying above
+                    victory = False
+            if gameover:
+                if event.key == pygame.K_r:
+                    background.drawbg(screen) #redraws background
+                    player.playerrestart(screen) #calls method to recenter player
+                    enemy.enemyrestart(screen_height) #calls method to recenter enemy
+                    gameover = False #change gameover back to False to prevent loop
+                    timer.state = True
+
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # initiates the background for the screen
+    background.drawbg(screen)
+
+    # draws player to background and displays hp
+    player.drawplayer(screen)
+    player.displayhp(screen)
+
+    # draws enemy to screen and displays hp
+    enemy.drawenemy(screen)
+    enemy.displayhp(screen)
+
+    # draws score to screen
+    score.drawscore(screen)
+
+    # draws timer to screen
+    timer.drawtimer(screen, seconds)
+
+    # managing sound effects and music
 
     enemy.enemymovement(player.posy,screen)
 
@@ -154,8 +158,7 @@ while True:
         background.victory(screen)
         scoreupdated = True
 
-    if scoreupdated:
-        score.updatescore(timer.bonusscore(seconds))
+    if scoreupdated: #may be useless
         scoreupdated = False
 
     #responsible for the damage calculations on the enemy side. If enemy hp hits zero, victory becomes true and loop will blit background
@@ -165,6 +168,7 @@ while True:
             if enemy.hp <= 0:
                 enemy.removeenemy()
                 player.posx = 3000
+                score.updatescore(timer.bonusscore(seconds)) #updates score based on time
                 victory = True
 
 

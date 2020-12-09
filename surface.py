@@ -38,9 +38,13 @@ class surface():
 
     def startscreen(self, screen):
        screen.blit(self.startimg, [0,0])
-       font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
+       font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 50)
        menu = font.render('Welcome to 2d Divers! Press P to start!', True, (0, 0, 0))
+       subtext = font.render('Travel across the world on your pirate ship', True, (0, 0, 0))
+       subtext2 = font.render('and defeat enemies to find treasure!', True, (0, 0, 0))
        screen.blit(menu, (200, 255))
+       screen.blit(subtext,(200, 355))
+       screen.blit(subtext2, (200, 455))
 
 
 class score():

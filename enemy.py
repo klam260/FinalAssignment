@@ -8,31 +8,16 @@ class enemy():
 
     def __init__(self, width, height):
         self.enemylvl = 1
-        self.hp = 2
+        self.hp = 3
         self.posx = (width - 250)
         self.posy = (height - 500)
-        self.speed = 2
-        self.enemyspeed = 2
+        self.dmg = 1
+        self.enemyspeed = 1
         self.totalbullets = [] #might not be used
         self.bullet = bullet(self.posx, self.posy)
-        if self.enemylvl == 1:
-            self.img = pygame.image.load(os.path.join('./assets', 'enemy.png'))
-            self.img = pygame.transform.scale(self.img, [100,100])
-            self.dmg = 1
-        elif self.enemylvl == 2:
-            self.img = pygame.image.load(os.path.join('./assets', 'enemylvl2.png'))
-            self.img = pygame.transform.scale(self.img, [150, 150])
-            self.dmg = 2
-        elif self.enemylvl == 3:
-            self.img = pygame.image.load(os.path.join('./assets', 'enemylvl3.png'))
-            self.img = pygame.transform.scale(self.img, [150, 150])
-            self.dmg = 3
-
         self.player = player()
         self.surface = surface(width, height)
 
-    def drawenemy(self, screen):
-        screen.blit(self.img, [self.posx, self.posy])
 
     def enemymovement(self, playerposy, screen):
         if playerposy >= self.posy:
@@ -49,16 +34,16 @@ class enemy():
         if self.bullet.playerCollision(playerx, playery, self.posx, self.posy, self.bullet.bulletposx, self.bullet.bulletposy):
             if player.hp >= 1:
                 player.hp -= self.dmg
-                if player.hp <= 0:
+                if player.hp <= 0 or self.hp <= 0:
                     # must remove bullet from game over here due to the current structure, as bullet from enemy is kept track in this function
                     self.bullet.bulletposx = -3000
                     return True
 
-
-
     def enemynextlvl(self):
         self.enemylvl += 1
-        self.hp += self.enemylvl + 1
+        self.hp += 1
+        self.dmg += 1
+        self.enemyspeed += 1
 
 
     def removeenemy(self):
@@ -73,7 +58,17 @@ class enemy():
         hp = font.render(str(self.hp), True, (255, 255, 255))
         screen.blit(hp, (self.posx + 30, self.posy - 60))
 
-
+    def drawenemy(self, screen):
+        if self.enemylvl == 1:
+            self.img = pygame.image.load(os.path.join('./assets', 'enemy.png'))
+            self.img = pygame.transform.scale(self.img, [100,100])
+        elif self.enemylvl == 2:
+            self.img = pygame.image.load(os.path.join('./assets', 'enemylvl2.png'))
+            self.img = pygame.transform.scale(self.img, [150, 150])
+        elif self.enemylvl == 3:
+            self.img = pygame.image.load(os.path.join('./assets', 'enemylvl3.png'))
+            self.img = pygame.transform.scale(self.img, [150, 150])
+        screen.blit(self.img, [self.posx, self.posy])
 
 
 
