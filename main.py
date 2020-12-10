@@ -24,11 +24,11 @@ background = surface(screen_width, screen_height)
 #initiate player (health, level)
 player = player()
 
-#initiate bullet
-bullet = bullet(player.posx, player.posy)
-
 #initiate enemy
 enemy = enemy(screen_width, screen_height)
+
+# initiate bullet
+bullet = bullet(player.posx, player.posy)
 
 #initiate score
 score = score()
@@ -42,10 +42,12 @@ sound = sound()
 #various states used to manage in game
 gameover = False
 victory = False
-startingscreen = True
-scoreupdated = False
+startingscreen = True #triggers at the beginning
+scoreupdated = False #might be useless
+currentlevel = 1 #used for keeping track of stages
+bonusscreen = False #triggers once reach level 4
 
-#for starting screen
+#for starting screen loop
 
 while startingscreen:
 
@@ -61,6 +63,7 @@ while startingscreen:
             pygame.quit()
             quit()
     pygame.display.update()
+    pygame.event.pump()
 
 
 #for making a timer in game
@@ -68,6 +71,7 @@ initialtime = pygame.time.get_ticks() #initiates the timer first
 
 #main game loop
 while True:
+
     #used as the timer for in game, only triggers when true. Once game over happens timer.state is set to false and we can retrieve the seconds that passed
     if timer.state:
         seconds = (pygame.time.get_ticks() - initialtime)/1000
@@ -89,19 +93,25 @@ while True:
 
 
     for event in pygame.event.get():
-
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 bullet.fire(screen, screen_width, player.posx, player.posy)
+                sound.cannon.play()#plays everytime a bullet is fired from player
             if victory:
                 if event.key == pygame.K_t:
-                    background.drawbg(screen)
-                    player.playernextlvl()
-                    player.drawplayer(screen)
-                    enemy.enemyrestart(screen_height) #resets position and health of enemy
-                    enemy.enemynextlvl() #upgrades enemy to scale difficulty
-                    enemy.drawenemy(screen) #draws enemy to screen after applying above
-                    victory = False
+                    if(currentlevel < 4):
+                        background.bgnextlvl()  # upgrades to the next level for background
+                        # background.drawbg(screen)
+                        player.playernextlvl()
+                        player.playerrestart() #resets position and hp for next level
+                        # player.drawplayer(screen) #check later if this is necessary, probably not as image will disappear as it's not in while loop
+                        enemy.enemyrestart(screen_height) #resets position and health of enemy
+                        enemy.enemynextlvl() #upgrades enemy to scale difficulty
+                        # enemy.drawenemy(screen) #draws enemy to screen after applying above
+                        currentlevel += 1 #once it reaches level 4, the bonus screen should appear
+                        victory = False
+
+
             if gameover:
                 if event.key == pygame.K_r:
                     background.drawbg(screen) #redraws background
@@ -114,7 +124,7 @@ while True:
             pygame.quit()
             sys.exit()
 
-    # initiates the background for the screen
+    # initiates the background for the screen, must be put into while loop to be shown on screen
     background.drawbg(screen)
 
     # draws player to background and displays hp
@@ -131,10 +141,7 @@ while True:
     # draws timer to screen
     timer.drawtimer(screen, seconds)
 
-    # managing sound effects and music
-
     enemy.enemymovement(player.posy,screen)
-
 
       # bullet movement, if state is fire in bullet object, proceed to calculate movements through while loop
     if bullet.state == 'fire':
@@ -142,24 +149,20 @@ while True:
         bullet.bulletposx += bullet.bulletspeed
 
 
-    #for enemy firing, enemy can fire bullet but bullet collision is not properly calculated. returns true if enemy kills player
+    #for enemy firing, enemy can fire bullet, returns true if enemy kills player
     if enemy.enemyfire(screen, player.posx, player.posy, player):
         gameover = True
 
     #if gameover state becomes true, draw the following onto the screen, same with victory
     if gameover:
-        player.removeplayer()
-        enemy.removeenemy()
-        timer.state = False
-        background.gameover(screen)
+        player.removeplayer() #sets player off of screen
+        enemy.removeenemy()#sets position of enemy in different position
+        timer.state = False #stops timer
+        background.gameover(screen) #draws game over screen
 
     if victory:
-        timer.state = False
+        timer.state = False #stops timer
         background.victory(screen)
-        scoreupdated = True
-
-    if scoreupdated: #may be useless
-        scoreupdated = False
 
     #responsible for the damage calculations on the enemy side. If enemy hp hits zero, victory becomes true and loop will blit background
     if bullet.enemyCollision(enemy.posx, enemy.posy, bullet.bulletposx, bullet.bulletposy):
@@ -167,15 +170,72 @@ while True:
             enemy.hp -= player.dmg
             if enemy.hp <= 0:
                 enemy.removeenemy()
-                player.posx = 3000
+                player.removeplayer()
                 score.updatescore(timer.bonusscore(seconds)) #updates score based on time
                 victory = True
 
-
+    #if current level is 4, set bonusscreen to true and break out of while loop to proceed to bonus screen
+    if currentlevel == 4:
+        bonusscreen = True
+        player.playerrestart()
+        break
 
     clock.tick(60)
     pygame.event.pump()
     pygame.display.update()
+
+#States here
+displaywinner = False
+
+#loop for ending screen
+while bonusscreen:
+
+    background.drawbg(screen)
+    player.drawplayer(screen)
+    background.drawbonusitem(screen)
+    score.drawscore(screen)
+
+    if bullet.enemyCollision(background.bonusposx, background.bonusposy, bullet.bulletposx, bullet.bulletposy): #althought it's called enemy collision the parameters are changed to include the coordinates of the treasure chest
+        score.updatescore(100000)  # provide bonus score after hitting treasure box
+        bullet.bulletposx = 2000
+        displaywinner = True
+
+        # for character movements
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_w]:
+        player.playermoveup(screen_height)
+
+    if keys[pygame.K_s]:
+        player.playermovedown(screen_height)
+
+    if keys[pygame.K_a]:
+        player.playermoveleft(screen_width)
+
+    if keys[pygame.K_d]:
+        player.playermoveright(screen_width)
+
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_x:
+                exit()
+            if event.key == pygame.K_SPACE:
+                bullet.fire(screen, screen_width, player.posx, player.posy)
+                sound.cannon.play()  # plays everytime a bullet is fired from player
+
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+    if bullet.state == 'fire':
+        bullet.fire(screen, screen_width, player.posx, player.posy)
+        bullet.bulletposx += bullet.bulletspeed
+
+    if displaywinner:
+        background.bonusitemmessage(screen)
+
+
+    pygame.display.update()
+    pygame.event.pump()
 
 
 

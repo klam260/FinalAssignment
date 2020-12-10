@@ -20,11 +20,14 @@ class enemy():
 
 
     def enemymovement(self, playerposy, screen):
-        if playerposy >= self.posy:
+        if playerposy > self.posy:
             self.posy += self.enemyspeed
             screen.blit(self.img, [self.posx, self.posy])
-        elif playerposy <= self.posy:
+        elif playerposy < self.posy:
             self.posy -= self.enemyspeed
+            screen.blit(self.img, [self.posx, self.posy])
+        elif playerposy == self.posy:
+            self.posy = playerposy
             screen.blit(self.img, [self.posx, self.posy])
 
     #fires bullet relative to where the enemy is first, then calls the player collision method, if collision occurs, true is returns and health deduction occurs
@@ -34,9 +37,10 @@ class enemy():
         if self.bullet.playerCollision(playerx, playery, self.posx, self.posy, self.bullet.bulletposx, self.bullet.bulletposy):
             if player.hp >= 1:
                 player.hp -= self.dmg
-                if player.hp <= 0 or self.hp <= 0:
+                if player.hp <= 0 or self.hp <= 0: #if player hp hits zero or enemy own hp hits zero, remove bullet being fired
                     # must remove bullet from game over here due to the current structure, as bullet from enemy is kept track in this function
-                    self.bullet.bulletposx = -3000
+                    self.bullet.bulletposx = self.posx
+                    self.bullet.bulletposy = self.posy
                     return True
 
     def enemynextlvl(self):
@@ -60,13 +64,13 @@ class enemy():
 
     def drawenemy(self, screen):
         if self.enemylvl == 1:
-            self.img = pygame.image.load(os.path.join('./assets', 'enemy.png'))
+            self.img = pygame.image.load(os.path.join('./assets', 'enemy.png')).convert_alpha()
             self.img = pygame.transform.scale(self.img, [100,100])
         elif self.enemylvl == 2:
-            self.img = pygame.image.load(os.path.join('./assets', 'enemylvl2.png'))
+            self.img = pygame.image.load(os.path.join('./assets', 'enemylvl2.png')).convert_alpha()
             self.img = pygame.transform.scale(self.img, [150, 150])
         elif self.enemylvl == 3:
-            self.img = pygame.image.load(os.path.join('./assets', 'enemylvl3.png'))
+            self.img = pygame.image.load(os.path.join('./assets', 'enemylvl3.png')).convert_alpha()
             self.img = pygame.transform.scale(self.img, [150, 150])
         screen.blit(self.img, [self.posx, self.posy])
 
