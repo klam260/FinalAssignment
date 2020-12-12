@@ -10,26 +10,19 @@ class bullet():
         self.img = pygame.transform.scale(self.img, (25, 25))
         self.bulletposx = posx
         self.bulletposy = posy
-        self.bulletspeed = 10
+        self.bulletspeed = 20
+        self.enemybulletspeed = 8
         self.state = 'ready'
         self.enemystate = 'ready'
 
 
-    def fire(self, screen, width, playerposx, playerposy):
-        self.state = 'fire'
+    def fire(self, screen):
         screen.blit(self.img, [self.bulletposx + 70, self.bulletposy + 20])
-
-        #resets position after reaching the end of the screen might change this to recognize collision.
-
-        if self.bulletposx >= width:
-            self.state ='ready'
-            self.bulletposx = playerposx
-            self.bulletposy = playerposy
 
     def enemyfire(self, screen, enemyposx, enemyposy):
         self.enemystate = 'fire'
         screen.blit(self.img, [self.bulletposx - 60, self.bulletposy])
-        self.bulletposx -= 8
+        self.bulletposx -= self.enemybulletspeed #change the bullet position speed here if you don't want to make it the same.
         # print(self.bulletposx)
         if self.bulletposx <= 0:
             self.enemystate = 'ready'
@@ -60,6 +53,10 @@ class bullet():
             return True
 
 
+# this function was created to see if it gets rid of a bug where bullet fired does not consistently follow where the player is if player moves and fires at the same time.
+    def updateposition(self, posx, posy):
+        self.bulletposx = posx
+        self.bulletposy = posy
 
     def drawbullet(self, screen, bulletposx, bulletposy):
         screen.blit(self.img, [bulletposx, bulletposy])

@@ -3,7 +3,7 @@ import pygame
 
 class player():
 
-    def __init__(self):
+    def __init__(self, font):
 
         self.hp = 4
         self.posx = 200
@@ -13,6 +13,7 @@ class player():
         self.totalbullets = []
         self.image = 'initiate'
         self.dmg = 4
+        self.font = font
 
         # if state defines which ship to use depending on player level.
 
@@ -76,8 +77,8 @@ class player():
         self.posx += 3000
 
     def displayhp(self, screen):
-        font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
-        hp = font.render(str(self.hp), True, (255, 255, 255))
+        # font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
+        hp = self.font.render(str(self.hp), True, (255, 255, 255))
         screen.blit(hp, (self.posx + 30, self.posy - 60))
 
 

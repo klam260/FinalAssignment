@@ -1,4 +1,4 @@
-import pygame, sys, math
+import pygame, sys, math, os
 from surface import surface, score, timer
 from player import player
 from bullet import bullet
@@ -17,24 +17,26 @@ screen_height = 900
 screen = pygame.display.set_mode((screen_width,screen_height))
 pygame.display.set_caption('2d-diver')
 
+#attempting to render font here to see if it reduces lag.
+font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 50)
 
 #initiate background
-background = surface(screen_width, screen_height)
+background = surface(screen_width, screen_height, font)
 
 #initiate player (health, level)
-player = player()
+player = player(font)
 
 #initiate enemy
-enemy = enemy(screen_width, screen_height)
+enemy = enemy(screen_width, screen_height, font)
 
 # initiate bullet
 bullet = bullet(player.posx, player.posy)
 
 #initiate score
-score = score()
+score = score(font)
 
 #initiate timer
-timer = timer()
+timer = timer(font)
 
 #initiate sound
 sound = sound()
@@ -52,6 +54,9 @@ bonusscreen = False #triggers once reach level 4
 while startingscreen:
 
     background.startscreen(screen)
+
+    #initiate fps here
+    background.displayfps(screen, clock)
 
     for event in pygame.event.get():
         sound.startscreenbgm.play()
@@ -76,35 +81,61 @@ while True:
     if timer.state:
         seconds = (pygame.time.get_ticks() - initialtime)/1000
 
+    # initiates the background for the screen, must be put into while loop to be shown on screen
+    background.drawbg(screen)
+
+    # draws player to background and displays hp
+    player.drawplayer(screen)
+    player.displayhp(screen)
+
+    # draws enemy to screen and displays hp
+    enemy.drawenemy(screen)
+    enemy.displayhp(screen)
+
+    # draws score to screen
+    score.drawscore(screen)
+
+    # draws timer to screen
+    timer.drawtimer(screen, seconds)
+
+    #initiate FPS here for measurement
+    background.displayfps(screen, clock)
+
+    enemy.enemymovement(player.posy)
+
     # for character movements
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_w]:
         player.playermoveup(screen_height)
+        # bullet.updateposition(player.posx, player.posy)
 
     if keys[pygame.K_s]:
         player.playermovedown(screen_height)
+        # bullet.updateposition(player.posx, player.posy)
 
     if keys[pygame.K_a]:
         player.playermoveleft(screen_width)
+        # bullet.updateposition(player.posx, player.posy)
 
     if keys[pygame.K_d]:
         player.playermoveright(screen_width)
-
+        # bullet.updateposition(player.posx, player.posy)
 
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                bullet.fire(screen, screen_width, player.posx, player.posy)
-                sound.cannon.play()#plays everytime a bullet is fired from player
+                if bullet.state == 'ready':
+                    bullet.state = 'fire'
+                    bullet.bulletposx = player.posx
+                    bullet.bulletposy = player.posy
+                    sound.cannon.play()#plays everytime a bullet is fired from player
             if victory:
                 if event.key == pygame.K_t:
                     if(currentlevel < 4):
                         background.bgnextlvl()  # upgrades to the next level for background
-                        # background.drawbg(screen)
                         player.playernextlvl()
                         player.playerrestart() #resets position and hp for next level
-                        # player.drawplayer(screen) #check later if this is necessary, probably not as image will disappear as it's not in while loop
                         enemy.enemyrestart(screen_height) #resets position and health of enemy
                         enemy.enemynextlvl() #upgrades enemy to scale difficulty
                         # enemy.drawenemy(screen) #draws enemy to screen after applying above
@@ -124,28 +155,13 @@ while True:
             pygame.quit()
             sys.exit()
 
-    # initiates the background for the screen, must be put into while loop to be shown on screen
-    background.drawbg(screen)
-
-    # draws player to background and displays hp
-    player.drawplayer(screen)
-    player.displayhp(screen)
-
-    # draws enemy to screen and displays hp
-    enemy.drawenemy(screen)
-    enemy.displayhp(screen)
-
-    # draws score to screen
-    score.drawscore(screen)
-
-    # draws timer to screen
-    timer.drawtimer(screen, seconds)
-
-    enemy.enemymovement(player.posy,screen)
-
       # bullet movement, if state is fire in bullet object, proceed to calculate movements through while loop
     if bullet.state == 'fire':
-        bullet.fire(screen, screen_width, player.posx, player.posy)
+        if bullet.bulletposx >= screen_width:
+            bullet.state ='ready'
+            bullet.bulletposx = -100
+            bullet.bulletposy = -100
+        bullet.fire(screen)
         bullet.bulletposx += bullet.bulletspeed
 
 
@@ -217,22 +233,31 @@ while bonusscreen:
 
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_x:
+            if event.key == pygame.K_x and displaywinner:
                 exit()
             if event.key == pygame.K_SPACE:
-                bullet.fire(screen, screen_width, player.posx, player.posy)
+                bullet.fire(screen)
                 sound.cannon.play()  # plays everytime a bullet is fired from player
 
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-    if bullet.state == 'fire':
-        bullet.fire(screen, screen_width, player.posx, player.posy)
-        bullet.bulletposx += bullet.bulletspeed
+    # if bullet.state == 'fire':
+    #     bullet.fire(screen)
+    #     bullet.bulletposx += bullet.bulletspeed
 
     if displaywinner:
         background.bonusitemmessage(screen)
+        player.removeplayer()
 
+    # bullet movement, if state is fire in bullet object, proceed to calculate movements through while loop
+    if bullet.state == 'fire':
+        if bullet.bulletposx >= screen_width:
+            bullet.state ='ready'
+            bullet.bulletposx = -100
+            bullet.bulletposy = -100
+        bullet.fire(screen)
+        bullet.bulletposx += bullet.bulletspeed
 
     pygame.display.update()
     pygame.event.pump()
