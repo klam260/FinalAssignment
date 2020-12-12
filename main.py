@@ -15,10 +15,10 @@ clock = pygame.time.Clock()
 screen_width = 1600
 screen_height = 900
 screen = pygame.display.set_mode((screen_width,screen_height))
-pygame.display.set_caption('2d-diver')
+pygame.display.set_caption('The Black Pearls Vengeance')
 
 #attempting to render font here to see if it reduces lag.
-font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 50)
+font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 44)
 
 #initiate background
 background = surface(screen_width, screen_height, font)
@@ -255,6 +255,7 @@ while bonusscreen:
     if displaywinner:
         background.bonusitemmessage(screen)
         player.removeplayer()
+        background.bonusposx = -100
 
     # bullet movement, if state is fire in bullet object, proceed to calculate movements through while loop
     if bullet.state == 'fire':

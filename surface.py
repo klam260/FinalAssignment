@@ -40,21 +40,18 @@ class surface():
             screen.blit(self.bgimglvl4, [0, 0])
 
     def gameover(self, screen):
-        # font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
         gameover = self.font.render('GAME OVER press R to restart', True, (255, 0, 0))
         screen.blit(gameover, (400, 420))
 
     def victory(self, screen):
-        # font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
         victory = self.font.render('Victory press T to proceed to next level', True, (0, 255, 0))
         screen.blit(victory, (300, 400))
 
     def startscreen(self, screen):
        screen.blit(self.startimg, [0,0])
-       # font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 50)
-       menu = self.font.render('Welcome to 2d Divers! Press P to start!', True, (0, 0, 0))
+       menu = self.font.render('Welcome to The Black Pearls Vengeance! Press P to start!', True, (0, 0, 0))
        subtext = self.font.render('Travel across the world on your pirate ship', True, (0, 0, 0))
-       subtext2 = self.font.render('and defeat enemies to find treasure!', True, (0, 0, 0))
+       subtext2 = self.font.render('and defeat enemies to recover your treasure!', True, (0, 0, 0))
        screen.blit(menu, (200, 255))
        screen.blit(subtext,(200, 355))
        screen.blit(subtext2, (200, 455))
@@ -68,7 +65,6 @@ class surface():
         screen.blit(bonusitem, (self.bonusposx, self.bonusposy))
 
     def bonusitemmessage(self, screen):
-        # font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 50)
         msg = self.font.render('Congratulations on winning the game! Press X to exit', True, (0, 255, 0))
         screen.blit(msg, (200, 255))
 
@@ -89,7 +85,6 @@ class score():
         self.score += scoreamount
 
     def drawscore(self, screen):
-        # font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 28)
         score = self.font.render(f'SCORE: {self.score}', True, (255, 0, 0))
         screen.blit(score, (50, 50))
 
@@ -101,14 +96,13 @@ class timer():
         self.minutes = 0
         self.state = True
         self.font = font
-        self.basetime = 200
+        self.basetime = 400
 
     def bonusscore(self, seconds):
         self.basetime -= seconds
         return math.trunc(self.basetime) * self.bonus
 
     def drawtimer(self, screen, seconds):
-        # font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 28)
         timer = self.font.render(f" Time in seconds: {math.trunc(seconds)}", True, (255, 0, 0))
         screen.blit(timer, (800, 50))
 
