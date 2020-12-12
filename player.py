@@ -10,9 +10,8 @@ class player():
         self.posy = 500
         self.speed = 5
         self.playerlvl = 1
-        self.totalbullets = []
         self.image = 'initiate'
-        self.dmg = 4
+        self.dmg = 1
         self.font = font
 
         # if state defines which ship to use depending on player level.
@@ -58,15 +57,6 @@ class player():
 
         screen.blit(self.image, [self.posx, self.posy])
 
-    # def playernextlvl(self):
-    #     #reset starting position
-    #     self.posx = 200
-    #     self.posy = 500
-    #     if self.playerlvl <= 3:
-    #         self.playerlvl += 1
-    #         self.hp += 1
-    #     else:
-    #         self.playerlvl = 3
 
     def playerrestart(self):
         self.posx = 200

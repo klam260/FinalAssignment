@@ -23,10 +23,3 @@ class sound():
             pygame.mixer.music.load(os.path.join('./assets/bgm', 'Cynical Ballroom Dance.wav'))
             pygame.mixer.music.play(-1)
 
-    #leveling up chooses a different bgm might be useless
-    # def soundlvlup(self):
-    #     if self.lvl < 3:
-    #         self.lvl += 1
-    #     else:
-    #         self.lvl = 3
-

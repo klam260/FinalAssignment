@@ -14,11 +14,11 @@ class enemy():
         self.posy = (height - 500)
         self.dmg = 1
         self.enemyspeed = 1
-        self.totalbullets = [] #might not be used
         self.bullet = bullet(self.posx, self.posy)
         self.player = player(font)
         self.surface = surface(width, height, font)
         self.font = font
+
 
         #initiating images here to reduce load time
         self.img = pygame.image.load(os.path.join('./assets', 'enemy.png'))
@@ -43,10 +43,13 @@ class enemy():
         if self.bullet.playerCollision(playerx, playery, self.posx, self.posy, self.bullet.bulletposx, self.bullet.bulletposy):
             if player.hp >= 1:
                 player.hp -= self.dmg
-        if player.hp <= 0 or self.hp <= 0: #if player hp hits zero or enemy own hp hits zero, remove bullet being fired
-            # must remove bullet from game over here due to the current structure, as bullet from enemy is kept track in this function
+        if player.hp <= 0: #if player hp hits zero or enemy own hp hits zero, remove bullet being fired
+            # must reset bullet from game over here due to the current structure, as bullet from enemy is kept track in this function
             self.bullet.bulletposx = self.posx
             self.bullet.bulletposy = self.posy
+            return True #returns true so we can set gameover
+        if self.hp <= 0:
+            self.bullet.bulletposx = -100
 
 
     def enemynextlvl(self):
@@ -55,6 +58,7 @@ class enemy():
         self.dmg += 1
         self.enemyspeed += 1
         self.basehp += 1
+        self.bullet.enemybulletspeed += 5 #check to see if this works
 
 
     def removeenemy(self):

@@ -43,10 +43,10 @@ class bullet():
     #for collision from enemy bullets.
     def playerCollision(self, playerx, playery, enemyposx, enemyposy, bulletx, bullety):
         distance = math.sqrt((math.pow(playerx - bulletx, 2)) + (math.pow(playery-bullety,2)))
-        # print(f"this is the distance from enemy to player: {distance}")
+
         if distance < 70:
            #moves bullet off screen upon contact, when trying to move bullet back to player, it starts looping.
-            # print(f'collision from enemy occured at {distance}' )
+
             self.bulletposx = enemyposx
             self.bulletposy = enemyposy
             self.enemystate = 'ready'
