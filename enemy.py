@@ -8,8 +8,8 @@ class enemy():
 
     def __init__(self, width, height, font):
         self.enemylvl = 1
-        self.hp = 3
-        self.basehp = 3 #basehp is stored so that it can be used to calculate HP increase when leveling
+        self.hp = 6
+        self.basehp = 6 #basehp is stored so that it can be used to calculate HP increase when leveling
         self.posx = (width - 250)
         self.posy = (height - 500)
         self.dmg = 1

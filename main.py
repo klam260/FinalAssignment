@@ -133,7 +133,7 @@ while True:
                     bullet.bulletposy = player.posy
                     sound.cannon.play()#plays everytime a bullet is fired from player
             if victory:
-                if event.key == pygame.K_t:
+                if event.key == pygame.K_t:#press t to proceed to next level
                     if(currentlevel < 4):
                         background.bgnextlvl()  # upgrades to the next level for background
                         # player.playernextlvl() #upgrades player to next level #removing levelup mechanic, no real point
@@ -144,12 +144,13 @@ while True:
                         currentlevel += 1 #once it reaches level 4, the bonus screen should appear
                         sound.selectbgm(currentlevel) #initiates the next bgm
                         victory = False
+                        timer.state = True  #resumes timer
 
 
             if gameover:
                 if event.key == pygame.K_r:
                     background.drawbg(screen) #redraws background
-                    player.playerrestart(screen) #calls method to recenter player
+                    player.playerrestart() #calls method to recenter player
                     enemy.enemyrestart(screen_height) #calls method to recenter enemy
                     gameover = False #change gameover back to False to prevent loop
                     timer.state = True

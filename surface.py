@@ -41,8 +41,8 @@ class surface():
 
     def gameover(self, screen):
         # font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
-        gameover = self.font.render('GAME OVER', True, (255, 0, 0))
-        screen.blit(gameover, (600, 255))
+        gameover = self.font.render('GAME OVER press R to restart', True, (255, 0, 0))
+        screen.blit(gameover, (400, 420))
 
     def victory(self, screen):
         # font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 56)
@@ -97,13 +97,15 @@ class timer():
 
     def __init__(self, font):
         self.seconds = 0
-        self.bonus = 1000
+        self.bonus = 100
         self.minutes = 0
         self.state = True
         self.font = font
+        self.basetime = 200
 
     def bonusscore(self, seconds):
-        return math.trunc(seconds) * self.bonus
+        self.basetime -= seconds
+        return math.trunc(self.basetime) * self.bonus
 
     def drawtimer(self, screen, seconds):
         # font = pygame.font.Font(os.path.join('./assets', 'square.ttf'), 28)
