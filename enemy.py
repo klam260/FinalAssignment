@@ -23,10 +23,10 @@ class enemy():
         #initiating images here to reduce load time
         self.img = pygame.image.load(os.path.join('./assets', 'enemy.png'))
         self.img = pygame.transform.scale(self.img, [100, 100])
-        self.imglvltwo = pygame.image.load(os.path.join('./assets', 'enemylvl2.png'))
-        self.imglvltwo = pygame.transform.scale(self.img, [150, 150])
-        self.imglvlthree = pygame.image.load(os.path.join('./assets', 'enemylvl3.png'))
-        self.imglvlthree = pygame.transform.scale(self.img, [150, 150])
+        self.imglvl2 = pygame.image.load(os.path.join('./assets', 'enemylvl2.png'))
+        self.imglvl2 = pygame.transform.scale(self.imglvl2, [125, 125])
+        self.imglvl3 = pygame.image.load(os.path.join('./assets', 'enemylvl3.png'))
+        self.imglvl3 = pygame.transform.scale(self.imglvl3, [150, 150])
 
     def enemymovement(self, playerposy):
         if playerposy > self.posy:
@@ -48,6 +48,7 @@ class enemy():
             self.bullet.bulletposx = self.posx
             self.bullet.bulletposy = self.posy
 
+
     def enemynextlvl(self):
         self.enemylvl += 1
         self.hp += 1
@@ -68,12 +69,13 @@ class enemy():
         screen.blit(hp, (self.posx + 30, self.posy - 60))
 
     def drawenemy(self, screen):
+
         if self.enemylvl == 1:
             screen.blit(self.img, [self.posx, self.posy])
         elif self.enemylvl == 2:
-            screen.blit(self.imglvltwo, [self.posx, self.posy])
+            screen.blit(self.imglvl2, [self.posx, self.posy])
         elif self.enemylvl == 3:
-            screen.blit(self.imglvlthree, [self.posx, self.posy])
+            screen.blit(self.imglvl3, [self.posx, self.posy])
 
 
 

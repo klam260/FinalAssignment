@@ -58,15 +58,15 @@ class player():
 
         screen.blit(self.image, [self.posx, self.posy])
 
-    def playernextlvl(self):
-        #reset starting position
-        self.posx = 200
-        self.posy = 500
-        if self.playerlvl <= 3:
-            self.playerlvl += 1
-            self.hp += 1
-        else:
-            self.playerlvl = 3
+    # def playernextlvl(self):
+    #     #reset starting position
+    #     self.posx = 200
+    #     self.posy = 500
+    #     if self.playerlvl <= 3:
+    #         self.playerlvl += 1
+    #         self.hp += 1
+    #     else:
+    #         self.playerlvl = 3
 
     def playerrestart(self):
         self.posx = 200

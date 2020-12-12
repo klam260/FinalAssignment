@@ -20,13 +20,13 @@ class surface():
         self.bgimg = pygame.transform.scale(self.bgimg, (self.width, self.height))
 
         self.bgimglvl2 = pygame.image.load(os.path.join("./assets", 'backgroundlvl2.png')).convert_alpha()
-        self.bgimglvl2 = pygame.transform.scale(self.bgimg, (self.width, self.height))
+        self.bgimglvl2 = pygame.transform.scale(self.bgimglvl2, (self.width, self.height))
 
         self.bgimglvl3 = pygame.image.load(os.path.join("./assets", 'backgroundlvl3.png')).convert_alpha()
-        self.bgimglvl3 = pygame.transform.scale(self.bgimg, (self.width, self.height))
+        self.bgimglvl3 = pygame.transform.scale(self.bgimglvl3, (self.width, self.height))
 
         self.bgimglvl4 = pygame.image.load(os.path.join("./assets", 'background.png')).convert_alpha()
-        self.bgimglvl4 = pygame.transform.scale(self.bgimg, (self.width, self.height))
+        self.bgimglvl4 = pygame.transform.scale(self.bgimglvl4, (self.width, self.height))
 
 
     def drawbg(self, screen):
