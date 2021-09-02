@@ -1,6 +1,21 @@
 # FinalAssignment
  Game development project
 
+*In order to run the project you need the pygame package. Once you install that run main.py.
+
+Mechanic notes:
+
+Gameover - when gameover occurs objects are blitted off screen. Press R to restart the game or click X on the 
+top right to exit. 
+
+Press Space bar to fire your cannon
+
+WASD - Movement
+
+At the treasure chest screen, fire a cannonball into the chest to get massive bonus points
+
+Timer shows how many seconds have gone by, the faster you clear the screen the higher your score.
+
 Title: The Black Pearl's Vengeance
 
 Pitch: Sail across the world on the Black Pearl and seek vengeance on those who betrayed you and recover the treasure stolen from you!
@@ -22,17 +37,6 @@ Uniqueness: The black pearl is the first of it's pirate ship kind to be able to 
 Theme: 2D shooter
 
 
-Mechanic notes:
 
-Gameover - when gameover occurs objects are blitted off screen. Press R to restart the game or click X on the 
-top right to exit. 
-
-Press Space bar to fire your cannon
-
-WASD - Movement
-
-At the treasure chest screen, fire a cannonball into the chest to get massive bonus points
-
-Timer shows how many seconds have gone by, the faster you clear the screen the higher your score.
 
 
